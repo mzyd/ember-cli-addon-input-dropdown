@@ -1,0 +1,205 @@
+<!--
+	使用此组件,
+		valueList(必填)：
+		list显示数组
+
+	respondList(必填)：
+	   传给后台的数据 数组
+
+	location：
+		传 location="left" (或者不传入)就是设置li的float在左边 ,
+		传 location="right" 则是右边,
+
+	fixedWidth：
+		传 fixedWidth=XXX 固定宽度XXXpx; eg : fixedWidth=200 固定宽度200px
+		传 fixedWidth=false (或不传) 不固定宽度；
+
+	default：
+		传 default=“XXX” 有初始值；
+		不传 default 初始值为数组第一项
+-->
+
+<style type="text/css">
+
+/*normal*/
+
+.dropdown_custom{
+	position: relative;
+	display: inline-block;
+}
+
+.dropdown_custom_btn_box{
+	width: 100%;
+	height: 30px;
+	cursor: pointer;
+	overflow: hidden;
+	position: relative;
+	padding-left: 20px;
+	border-radius: 3px;
+	padding-right: 30px;
+	border: 1px solid #ccc;
+}
+
+.dropdown_custom_btn_box .isDisplaySearchBox {
+	height: 60px;
+}
+
+.dropdown_custom_btn_box span{
+	top: 50%;
+	right: 15px;
+	cursor: pointer;
+	position: absolute;
+}
+
+.dropdown_custom_btn_box button{
+	border:0!important; /*样式清零*/
+	margin: 0!important;/*样式清零*/
+	padding: 0!important;/*样式清零*/
+	width: 100%;
+	height: 100%;
+	background-color: white;
+}
+
+.dropdown_custom_ul{
+	left: 0;
+	top: 30px;
+	z-index: 100;/*提高显示层级*/
+	cursor: pointer;
+	min-width: 100%;
+	overflow-y: auto;
+	overflow-x: hidden;
+	position: absolute;/*让ul脱离文档流，不影响页面整体高度*/
+	max-height: 300px;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+	background-color: #fff;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	display: none!important;/*默认不显示*/
+}
+
+.dropdown_custom_ul>li{
+	min-width: 100%;
+}
+
+.dropdown_custom_ul>li>div{
+	height: 30px;
+	cursor: pointer;
+	min-width: 100%;
+	line-height: 30px;
+	padding-left: 20px;
+	padding-right: 30px;
+	display: inline-block;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.dropdown_custom_ul>li:hover{
+	background-color: #eaeaea;
+}
+
+.dropdown_custom_btn_box>input {
+	display: none;
+}
+
+.dropdown_custom_btn_box>span {
+	display: none;
+}
+
+.dropdown_custom_btn_box .isDisplaySearchBox>input {
+	display: block;
+}
+
+.dropdown_custom_btn_box .isDisplaySearchBox>span {
+	display: block;
+}
+
+.dropdown_custom .dropdown_custom_ul.showUl{
+	display: inline-block!important;
+}
+
+/**
+ * 自定义样式
+ */
+
+/*disabled样式*/
+.dropdown_custom.dropdown_isDisabeld .dropdown_custom_btn_box {
+	border-color: transparent;
+	cursor: default;
+}
+
+.dropdown_custom.dropdown_isDisabeld .dropdown_custom_btn_box span {
+	display: none;
+}
+
+.dropdown_custom.dropdown_isDisabeld .dropdown_custom_btn_box button {
+	cursor: default;
+}
+
+/*ul left样式*/
+.dropdown_custom.left .dropdown_custom_ul{
+	left: 0;
+	right: auto;
+}
+
+/*ul right样式*/
+.dropdown_custom.right .dropdown_custom_ul{
+	right: 0;
+	left: auto;
+}
+
+/*固定宽度样式*/
+
+.dropdown_custom.fixed_width .dropdown_custom_btn_box button{
+	text-align: left;
+	overflow:hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.dropdown_custom.fixed_width .dropdown_custom_ul{
+	width: 100%;
+}
+
+.dropdown_custom.fixed_width .dropdown_custom_ul>li{
+	width: 100%;
+}
+
+.dropdown_custom.fixed_width .dropdown_custom_ul>li>div{
+	width: auto;
+	overflow:hidden;
+	display: inline-block;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+</style>
+
+<!-- ****************************Content******************************* -->
+
+<div class="dropdown_custom clearfix {{location}}
+			{{if isFixedWidth 'fixed_width' ''}}
+			{{if isDisabled 'dropdown_isDisabeld'}}"
+	{{action "leaveDropdownUl" on="mouseLeave"}}
+	{{action "openUl"}}
+	style="width:{{if isFixedWidth (concat fixedWidth 'px') 'auto'}}">
+
+	<div class="dropdown_custom_btn_box  {{if isDisplaySearchBox 'changeHeight' ''}}">
+		<button>
+			{{default}}
+			<span class="caret"></span>
+		</button>
+	</div>
+
+	<ul class="dropdown_custom_ul {{if showUl 'showUl' ''}}"
+			  {{action "moveDropdownUl" on="mouseEnter"}}>
+
+		{{#each valueList as |btnValue index|}}
+			<li {{action "replaceValDouble" on="doubleClick"}} {{action "replaceVal" index}}>
+				<div>
+					{{btnValue}}
+				</div>
+			</li>
+		{{/each}}
+	</ul>
+</div>
